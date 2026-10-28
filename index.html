@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IloveFood ITF.OFFICIAL - Shokugeki Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Shojumaru&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'shokugeki-red': '#E60012',
+                        'shokugeki-darkred': '#990000',
+                        'shokugeki-gold': '#FFD700',
+                        'shokugeki-orange': '#FF5349',
+                        'shokugeki-dark': '#0F0E17',
+                        'shokugeki-card': '#1C1A27',
+                        'card-offwhite': '#FFF8EB',
+                        'coral': '#EE6055'
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                        anime: ['Shojumaru', 'Kanit', 'cursive']
+                    },
+                    boxShadow: {
+                        'flame': '0 0 25px rgba(255, 83, 73, 0.6), 0 0 50px rgba(255, 215, 0, 0.3)',
+                        'gold': '0 0 20px rgba(255, 215, 0, 0.5)',
+                        'card': '0 20px 40px rgba(0,0,0,0.5)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #0c0a09;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        .speed-lines {
+            background: repeating-conic-gradient(
+                from 0deg,
+                rgba(255, 83, 73, 0.15) 0deg 2deg,
+                transparent 2deg 10deg
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .speed-lines.active {
+            opacity: 1;
+            animation: rotateLines 4s linear infinite;
+        }
+
+        @keyframes rotateLines {
+            from { transform: scale(1.5) rotate(0deg); }
+            to { transform: scale(1.5) rotate(360deg); }
+        }
+
+        .flame-border-container {
+            position: relative;
+        }
+        .flame-border-container::before {
+            content: '';
+            position: absolute;
+            top: -3px; left: -3px; right: -3px; bottom: -3px;
+            background: linear-gradient(45deg, #FF5349, #FFD700, #E60012, #FF8C00);
+            background-size: 400% 400%;
+            z-index: -1;
+            border-radius: 1.75rem;
+            animation: glowingBorder 3s ease infinite;
+        }
+
+        @keyframes glowingBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+
+        .randomize-spin {
+            animation: fastSpinAnime 0.12s infinite linear;
+        }
+
+        @keyframes fastSpinAnime {
+            0% { transform: scale(0.92) rotate(-4deg); filter: blur(2px) brightness(1.2); }
+            50% { transform: scale(1.08) rotate(4deg); filter: blur(4px) brightness(1.4); }
+            100% { transform: scale(0.92) rotate(-4deg); filter: blur(2px) brightness(1.2); }
+        }
+
+        .pop-in {
+            animation: shokugekiBurst 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes shokugekiBurst {
+            0% { transform: scale(0.6) rotate(-10deg); opacity: 0; filter: brightness(2); }
+            70% { transform: scale(1.05) rotate(2deg); opacity: 1; filter: brightness(1.2); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF5349;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between select-none relative bg-gradient-to-b from-black via-zinc-950 to-black text-gray-100">
+
+    <div id="speedLines" class="speed-lines fixed inset-0 pointer-events-none z-0"></div>
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <header class="bg-gradient-to-r from-red-700 via-shokugeki-orange to-red-700 text-white h-16 px-4 md:px-12 flex items-center justify-between shadow-2xl relative z-20 border-b-2 border-shokugeki-gold/60">
+        <div class="flex items-center gap-2">
+            <span class="bg-black/40 text-shokugeki-gold font-mono px-2.5 py-1 rounded text-xs md:text-sm font-bold tracking-wider border border-shokugeki-gold/30">
+                69070014
+            </span>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-utensils text-shokugeki-gold animate-pulse text-sm md:text-lg"></i>
+            <h1 class="text-base sm:text-xl md:text-2xl font-extrabold tracking-wider uppercase text-center drop-shadow-md font-kanit">
+                IloveFood ITF.OFFICIAL
+            </h1>
+            <i class="fa-solid fa-fire text-shokugeki-gold animate-bounce text-sm md:text-lg"></i>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <span class="hidden sm:inline-block bg-black/40 text-white font-mono px-2.5 py-1 rounded text-xs md:text-sm font-light tracking-wide border border-white/20">
+                Week 15
+            </span>
+            <button id="soundToggle" onclick="toggleSound()" class="w-9 h-9 rounded-full bg-black/40 border border-shokugeki-gold/50 flex items-center justify-center text-shokugeki-gold hover:bg-shokugeki-gold hover:text-black transition-all" title="Toggle Sound FX">
+                <i id="soundIcon" class="fa-solid fa-volume-high text-xs"></i>
+            </button>
+            <button onclick="toggleMenuDrawer()" class="w-9 h-9 rounded-full bg-black/40 border border-shokugeki-gold/50 flex items-center justify-center text-shokugeki-gold hover:bg-shokugeki-gold hover:text-black transition-all" title="View Full Menu">
+                <i class="fa-solid fa-book-open text-xs"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col items-center justify-center p-4 my-2 sm:my-6 relative z-10">
+        <div class="w-full max-w-md sm:max-w-lg flex flex-col items-center">
+
+            <div class="mb-3 px-4 py-1 rounded-full bg-red-950/80 border border-shokugeki-gold/50 text-shokugeki-gold text-xs sm:text-sm font-medium tracking-widest uppercase flex items-center gap-2 shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-shokugeki-gold animate-ping"></span>
+                <span>Today's Top Pick Menu</span>
+            </div>
+            
+            <div class="flame-border-container w-full">
+                <div id="foodCard" class="bg-gradient-to-b from-zinc-900 via-zinc-900 to-black w-full rounded-3xl p-5 sm:p-7 flex flex-col items-center text-center shadow-card border border-white/10 transition-all duration-300 min-h-[500px] justify-between relative overflow-hidden">
+                    
+                    <div class="w-full flex justify-between items-center mb-2 px-1 text-xs text-gray-400">
+                        <span class="text-shokugeki-gold font-bold tracking-wider uppercase font-anime text-[11px]">
+                            食戟のソーマ
+                        </span>
+                        <span id="dishCounter" class="bg-zinc-800 text-gray-300 px-2 py-0.5 rounded-full font-mono text-[10px] border border-white/10">
+                            Dish 1 / 5
+                        </span>
+                    </div>
+
+                    <div class="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden flex items-center justify-center p-1.5 mb-3 relative bg-gradient-to-tr from-shokugeki-gold via-red-500 to-shokugeki-orange shadow-flame group">
+                        <div class="w-full h-full rounded-full overflow-hidden bg-zinc-950 relative flex items-center justify-center">
+                            <img id="foodImage" 
+                                 src="" 
+                                 alt="Food" 
+                                 class="w-full h-full object-cover rounded-full transition-transform duration-300 group-hover:scale-105"
+                                 onerror="handleImageError(this)">
+                            
+                            <div id="imageGlow" class="absolute inset-0 bg-gradient-to-t from-red-600/30 via-transparent to-yellow-400/20 pointer-events-none"></div>
+                        </div>
+                    </div>
+
+                    <div id="foodDetails" class="w-full flex flex-col items-center">
+
+                        <h2 id="foodTitle" class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-shokugeki-gold to-amber-500 mb-2 drop-shadow-md">
+                        </h2>
+                        
+                        <p id="foodDescription" class="text-gray-300 text-xs sm:text-sm font-light mb-4 line-clamp-3 px-2 leading-relaxed">
+                        </p>
+
+                        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-black px-6 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-4 shadow-gold transform hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-coins text-red-900"></i>
+                            <span id="foodPrice"></span>
+                        </div>
+
+                        <div class="w-full grid grid-cols-3 gap-2 mb-4 px-2">
+                            <div class="bg-black/50 border border-white/10 rounded-lg p-1.5 text-center">
+                                <span class="block text-[10px] text-gray-400">Umami</span>
+                                <div class="flex justify-center text-shokugeki-gold text-[10px] gap-0.5 mt-0.5" id="umamiStars"></div>
+                            </div>
+                            <div class="bg-black/50 border border-white/10 rounded-lg p-1.5 text-center">
+                                <span class="block text-[10px] text-gray-400">Spiciness</span>
+                                <div class="flex justify-center text-red-500 text-[10px] gap-0.5 mt-0.5" id="spiceStars"></div>
+                            </div>
+                            <div class="bg-black/50 border border-white/10 rounded-lg p-1.5 text-center">
+                                <span class="block text-[10px] text-gray-400">Richness</span>
+                                <div class="flex justify-center text-amber-400 text-[10px] gap-0.5 mt-0.5" id="richStars"></div>
+                            </div>
+                        </div>
+
+                        <div class="w-full border-t border-zinc-800 pt-3">
+                            <p class="text-xs text-shokugeki-gold font-medium mb-2 flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-pepper-hot text-[10px]"></i>
+                                <span>วัตถุดิบ (Ingredients):</span>
+                            </p>
+                            <div id="foodIngredients" class="flex flex-wrap justify-center gap-1.5">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fixed bottom-4 right-4 sm:right-8 flex flex-col items-end z-30 pointer-events-none">
+                <div class="bg-zinc-900/90 border border-shokugeki-gold/60 text-white px-3.5 py-1.5 rounded-2xl text-xs shadow-flame text-gray-200 mb-2 relative animate-pulse flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                    <span class="font-medium text-shokugeki-gold">เชิญเลยๆ! ยินดีต้อนรับ!</span>
+                    <div class="absolute -bottom-1.5 right-6 w-3 h-3 bg-zinc-900 border-r border-b border-shokugeki-gold/60 transform rotate-45"></div>
+                </div>
+                <div class="relative group">
+                    <img id="mascotImg" 
+                         src="https://static.wikia.nocookie.net/shokugekinosoma/images/6/6f/S%C5%8Dma_Yukihira_mugshot_%28anime%29.png/revision/latest?cb=20161118021255" 
+                         alt="Yukihira Soma Mascot" 
+                         class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-110 pointer-events-auto cursor-pointer"
+                         onerror="handleMascotError(this)">
+                </div>
+            </div>
+
+            <button id="randomBtn" 
+                    onclick="randomizeFood()" 
+                    class="w-full bg-gradient-to-r from-red-600 via-shokugeki-orange to-red-600 hover:from-red-500 hover:to-orange-500 active:scale-95 text-white text-base sm:text-lg font-bold py-4 px-8 rounded-2xl shadow-flame border border-shokugeki-gold/40 transition-all duration-200 mt-6 cursor-pointer flex items-center justify-center gap-3 group relative overflow-hidden">
+                <span class="absolute inset-0 w-full h-full bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                <i class="fa-solid fa-dice text-shokugeki-gold text-xl group-hover:rotate-180 transition-transform duration-500"></i>
+                <span class="tracking-wide">จุ่มๆๆ กินรายดี</span>
+                <i class="fa-solid fa-fire-flame-curved text-shokugeki-gold text-lg group-hover:animate-bounce"></i>
+            </button>
+            
+        </div>
+    </main>
+
+
+    <div id="menuDrawer" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end">
+        <div class="w-full max-w-md bg-zinc-900 h-full p-6 overflow-y-auto border-l border-shokugeki-gold/30 shadow-2xl flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between border-b border-zinc-800 pb-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-scroll text-shokugeki-gold text-lg"></i>
+                        <h3 class="text-lg font-bold text-shokugeki-gold uppercase">Totsuki Culinary Menu</h3>
+                    </div>
+                    <button onclick="toggleMenuDrawer()" class="text-gray-400 hover:text-white text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <p class="text-xs text-gray-400 mb-4">Select any standard Yukihira Specialty dish directly to view:</p>
+
+                <div id="menuList" class="space-y-3">
+                </div>
+            </div>
+
+            <div class="border-t border-zinc-800 pt-4 mt-6 text-center text-xs text-gray-500">
+                Shokugeki no Soma Official Food Picker
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center py-4 text-xs text-gray-400 border-t border-zinc-900 bg-black/80 relative z-10">
+        &copy; Yukihira Restaurant - Since 2012
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
